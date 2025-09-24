@@ -7,4 +7,4 @@ docker run --rm -it \
   -e OPENVSCODE_SERVER_PORT=3000 \
   -v "$(pwd)/workspace:/home/workspace" \
   --name ovscode \
-  tusharkumbhar6/openvscode-spark-image:local
+  tusharkumbhar6/openvscode-spark-image:1.0.0-alpha.2

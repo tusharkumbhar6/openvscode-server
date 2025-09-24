@@ -1,6 +1,32 @@
 # OpenVSCode Server + Java 17 + Spark 3.5.1
 FROM gitpod/openvscode-server:1.94.2
 
+# Security: refresh all security fixes in the base, then remove risky/unused tools
+USER root
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 1) Bring the base up to date (fixes many CVEs in glibc, curl, git, krb5, pam, expat, etc.)
+RUN apt-get update && apt-get -y upgrade
+
+# 2) Explicitly upgrade frequently-flagged libs (idempotent; OK if already current)
+RUN apt-get install -y --only-upgrade \
+    curl libcurl4 \
+    libtasn1-6 libcap2 libssh-4 \
+    sqlite3 libsqlite3-0 \
+    libc6 libc-bin \
+    libpam0g \
+    libexpat1 \
+    libkrb5-3 libk5crypto3 libgssapi-krb5-2 libkrb5support0 \
+    git
+
+# 3) Remove stuff you don't need (reduces attack surface)
+#    Only purge if you truly don't need them in the running container.
+RUN apt-get purge -y sudo perl || true
+
+# 4) Clean up
+RUN apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+
 USER root
 ENV DEBIAN_FRONTEND=noninteractive
 
