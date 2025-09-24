@@ -1,0 +1,5 @@
+ms-python.python
+ms-toolsai.jupyter
+redhat.vscode-yaml
+scalameta.metals
+ms-azuretools.vscode-docker
